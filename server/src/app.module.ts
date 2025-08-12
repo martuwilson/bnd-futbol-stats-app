@@ -8,6 +8,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 import { MatchesModule } from './matches/matches.module'; // Reactivado
 import { CallUpsModule } from './call-ups/call-ups.module';
+import { StatisticsModule } from './statistics/statistics.module'; // Reactivado
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { CallUpsModule } from './call-ups/call-ups.module';
     PrismaModule,
     UsersModule,
     MatchesModule, // Reactivado
-    CallUpsModule,
+    CallUpsModule, 
+    StatisticsModule, // Reactivado
   ],
   controllers: [AppController],
   providers: [AppService],

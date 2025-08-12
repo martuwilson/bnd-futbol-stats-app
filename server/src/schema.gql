@@ -33,6 +33,15 @@ type CallUpResponse {
   userId: String!
 }
 
+type ComparisonStatistics {
+  scoreDifference: Float!
+  user1: User!
+  user1Stats: PlayerStatistics!
+  user2: User!
+  user2Stats: PlayerStatistics!
+  winner: String!
+}
+
 input CreateCallUpInput {
   createdById: String!
   description: String
@@ -87,12 +96,29 @@ type Match {
   userId: String!
 }
 
+input MatchAnalysisInput {
+  matchId: String!
+}
+
 type MatchPlayer {
   id: ID!
   matchId: String!
   team: Int!
   user: User!
   userId: String!
+}
+
+type MatchStatistics {
+  date: DateTime!
+  matchId: String!
+  mvp: User
+  team1Goals: Int!
+  team1Name: String!
+  team2Goals: Int!
+  team2Name: String!
+  totalAssists: Int!
+  totalCards: Int!
+  totalGoals: Int!
 }
 
 type Mutation {
@@ -114,6 +140,25 @@ type Mutation {
   updateUser(data: UpdateUserInput!, id: String!): User!
 }
 
+input PlayerComparisonInput {
+  endDate: String
+  startDate: String
+  userId1: String!
+  userId2: String!
+}
+
+type PlayerStatistics {
+  assistsPerMatch: Float!
+  effectivenessRating: Float!
+  goalsPerMatch: Float!
+  totalAssists: Int!
+  totalGoals: Int!
+  totalMatches: Int!
+  totalRedCards: Int!
+  totalYellowCards: Int!
+  user: User!
+}
+
 type PlayerStats {
   assists: Int!
   goals: Int!
@@ -133,17 +178,59 @@ enum Position {
   MIDFIELDER
 }
 
+type PositionStatistics {
+  averageAssists: Float!
+  averageGoals: Float!
+  playerCount: Int!
+  position: String!
+  topPerformers: [PlayerStatistics!]!
+}
+
 type Query {
   activeCallUps: [CallUp!]!
   admins: [User!]!
   callUp(id: String!): CallUp
   callUps: [CallUp!]!
+  comparePlayersStatistics(input: PlayerComparisonInput!): ComparisonStatistics!
   isAdmin(userId: String!): Boolean!
   match(id: String!): Match
+  matchAnalysis(input: MatchAnalysisInput!): MatchStatistics!
   matches: [Match!]!
   matchesByUser(userId: String!): [Match!]!
+  mostActivePlayersPlayers(limit: Float = 10): [PlayerStatistics!]!
+  playerStatistics(filter: StatisticsFilterInput, userId: String!): PlayerStatistics!
+  positionStatistics(filter: StatisticsFilterInput): [PositionStatistics!]!
+  ranking(input: RankingInput!): [PlayerStatistics!]!
+  seasonStatistics(filter: StatisticsFilterInput): SeasonStatistics!
   user(id: String!): User
   users: [User!]!
+}
+
+input RankingInput {
+  category: String!
+  endDate: String
+  limit: Int
+  position: String
+  startDate: String
+}
+
+type SeasonStatistics {
+  averageAssistsPerMatch: Float!
+  averageGoalsPerMatch: Float!
+  mostEffective: [PlayerStatistics!]!
+  topAssists: [PlayerStatistics!]!
+  topScorers: [PlayerStatistics!]!
+  totalAssists: Int!
+  totalGoals: Int!
+  totalMatches: Int!
+}
+
+input StatisticsFilterInput {
+  endDate: String
+  limit: Int
+  position: String
+  startDate: String
+  userIds: [String!]
 }
 
 input UpdateCallUpInput {

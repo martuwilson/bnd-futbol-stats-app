@@ -70,4 +70,21 @@ export class MatchesResolver {
     await this.matchesService.updatePlayerStats(matchId, updateStatsInput);
     return true;
   }
+
+  // Queries para estadísticas básicas (legacy support) - Temporalmente comentado
+  /*
+  @Query(() => [Object], { name: 'topScorersBasic' })
+  async getTopScorers(
+    @Args('limit', { nullable: true, defaultValue: 10 }) limit: number,
+  ) {
+    return this.matchesService.getTopScorers(limit);
+  }
+
+  @Query(() => [Object], { name: 'topAssistsBasic' })
+  async getTopAssists(
+    @Args('limit', { nullable: true, defaultValue: 10 }) limit: number,
+  ) {
+    return this.matchesService.getTopAssists(limit);
+  }
+  */
 }

@@ -2,6 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input AddPlayerToMatchInput {
+  team: Int!
+  userId: String!
+}
+
 type CallUp {
   createdAt: DateTime!
   createdBy: User!
@@ -37,6 +42,14 @@ input CreateCallUpInput {
   title: String!
 }
 
+input CreateMatchInput {
+  date: String!
+  notes: String
+  team1Name: String
+  team2Name: String
+  userId: String!
+}
+
 input CreateUserInput {
   email: String!
   name: String!
@@ -57,17 +70,59 @@ input JoinCallUpInput {
   userId: String!
 }
 
+type Match {
+  createdAt: DateTime!
+  date: DateTime!
+  id: ID!
+  isFinished: Boolean!
+  matchPlayers: [MatchPlayer!]
+  notes: String
+  playerStats: [PlayerStats!]
+  team1Goals: Int!
+  team1Name: String!
+  team2Goals: Int!
+  team2Name: String!
+  updatedAt: DateTime!
+  user: User!
+  userId: String!
+}
+
+type MatchPlayer {
+  id: ID!
+  matchId: String!
+  team: Int!
+  user: User!
+  userId: String!
+}
+
 type Mutation {
+  addPlayerToMatch(data: AddPlayerToMatchInput!, matchId: String!): Match!
   closeCallUp(id: String!): CallUp!
   createCallUp(data: CreateCallUpInput!): CallUp!
+  createMatch(data: CreateMatchInput!): Match!
   createUser(data: CreateUserInput!): User!
   deleteCallUp(id: String!): Boolean!
+  deleteMatch(id: String!): Boolean!
   deleteUser(id: String!): Boolean!
   joinCallUp(data: JoinCallUpInput!): CallUp!
   leaveCallUp(callUpId: String!, userId: String!): CallUp!
   makeUserAdmin(userId: String!): User!
+  removePlayerFromMatch(matchId: String!, userId: String!): Match!
   updateCallUp(data: UpdateCallUpInput!, id: String!): CallUp!
+  updateMatch(data: UpdateMatchInput!, id: String!): Match!
+  updatePlayerStats(data: UpdatePlayerStatsInput!, matchId: String!): Boolean!
   updateUser(data: UpdateUserInput!, id: String!): User!
+}
+
+type PlayerStats {
+  assists: Int!
+  goals: Int!
+  id: ID!
+  matchId: String!
+  redCards: Int!
+  user: User!
+  userId: String!
+  yellowCards: Int!
 }
 
 """Las posiciones disponibles para los jugadores"""
@@ -84,6 +139,9 @@ type Query {
   callUp(id: String!): CallUp
   callUps: [CallUp!]!
   isAdmin(userId: String!): Boolean!
+  match(id: String!): Match
+  matches: [Match!]!
+  matchesByUser(userId: String!): [Match!]!
   user(id: String!): User
   users: [User!]!
 }
@@ -95,6 +153,24 @@ input UpdateCallUpInput {
   matchDate: String
   maxPlayers: Int
   title: String
+}
+
+input UpdateMatchInput {
+  date: String
+  isFinished: Boolean
+  notes: String
+  team1Goals: Int
+  team1Name: String
+  team2Goals: Int
+  team2Name: String
+}
+
+input UpdatePlayerStatsInput {
+  assists: Int
+  goals: Int
+  redCards: Int
+  userId: String!
+  yellowCards: Int
 }
 
 input UpdateUserInput {

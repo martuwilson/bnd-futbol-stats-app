@@ -33,6 +33,12 @@ export class Match {
   @Field(() => User)
   user: User;
 
+  @Field(() => [MatchPlayer], { nullable: true })
+  matchPlayers?: MatchPlayer[];
+
+  @Field(() => [PlayerStats], { nullable: true })
+  playerStats?: PlayerStats[];
+
   @Field()
   createdAt: Date;
 
@@ -49,10 +55,13 @@ export class MatchPlayer {
   team: number;
 
   @Field()
-  playerId: string;
+  userId: string;
 
   @Field()
   matchId: string;
+
+  @Field(() => User)
+  user: User;
 }
 
 @ObjectType()
@@ -73,8 +82,11 @@ export class PlayerStats {
   redCards: number;
 
   @Field()
-  playerId: string;
+  userId: string;
 
   @Field()
   matchId: string;
+
+  @Field(() => User)
+  user: User;
 }

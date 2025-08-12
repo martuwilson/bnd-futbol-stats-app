@@ -23,12 +23,12 @@ export class MatchesService {
         user: true,
         matchPlayers: {
           include: {
-            player: true,
+            user: true,
           },
         },
         playerStats: {
           include: {
-            player: true,
+            user: true,
           },
         },
       },
@@ -41,12 +41,12 @@ export class MatchesService {
         user: true,
         matchPlayers: {
           include: {
-            player: true,
+            user: true,
           },
         },
         playerStats: {
           include: {
-            player: true,
+            user: true,
           },
         },
       },
@@ -63,12 +63,12 @@ export class MatchesService {
         user: true,
         matchPlayers: {
           include: {
-            player: true,
+            user: true,
           },
         },
         playerStats: {
           include: {
-            player: true,
+            user: true,
           },
         },
       },
@@ -85,12 +85,12 @@ export class MatchesService {
         user: true,
         matchPlayers: {
           include: {
-            player: true,
+            user: true,
           },
         },
         playerStats: {
           include: {
-            player: true,
+            user: true,
           },
         },
       },
@@ -110,12 +110,12 @@ export class MatchesService {
         user: true,
         matchPlayers: {
           include: {
-            player: true,
+            user: true,
           },
         },
         playerStats: {
           include: {
-            player: true,
+            user: true,
           },
         },
       },
@@ -132,8 +132,8 @@ export class MatchesService {
     // Verificar que el jugador no esté ya en el partido
     const existingPlayer = await this.prisma.matchPlayer.findUnique({
       where: {
-        playerId_matchId: {
-          playerId: data.playerId,
+        userId_matchId: {
+          userId: data.userId,
           matchId: matchId,
         },
       },
@@ -146,7 +146,7 @@ export class MatchesService {
     // Agregar jugador al partido
     await this.prisma.matchPlayer.create({
       data: {
-        playerId: data.playerId,
+        userId: data.userId,
         matchId: matchId,
         team: data.team,
       },
@@ -155,7 +155,7 @@ export class MatchesService {
     // Crear estadísticas iniciales para el jugador
     await this.prisma.playerStats.create({
       data: {
-        playerId: data.playerId,
+        userId: data.userId,
         matchId: matchId,
       },
     });
@@ -163,11 +163,11 @@ export class MatchesService {
     return this.findOne(matchId);
   }
 
-  async removePlayerFromMatch(matchId: string, playerId: string) {
+  async removePlayerFromMatch(matchId: string, userId: string) {
     // Eliminar estadísticas del jugador
     await this.prisma.playerStats.deleteMany({
       where: {
-        playerId: playerId,
+        userId: userId,
         matchId: matchId,
       },
     });
@@ -175,7 +175,7 @@ export class MatchesService {
     // Eliminar jugador del partido
     await this.prisma.matchPlayer.deleteMany({
       where: {
-        playerId: playerId,
+        userId: userId,
         matchId: matchId,
       },
     });
@@ -186,8 +186,8 @@ export class MatchesService {
   async updatePlayerStats(matchId: string, data: UpdatePlayerStatsInput) {
     return this.prisma.playerStats.upsert({
       where: {
-        playerId_matchId: {
-          playerId: data.playerId,
+        userId_matchId: {
+          userId: data.userId,
           matchId: matchId,
         },
       },
@@ -198,7 +198,7 @@ export class MatchesService {
         redCards: data.redCards,
       },
       create: {
-        playerId: data.playerId,
+        userId: data.userId,
         matchId: matchId,
         goals: data.goals || 0,
         assists: data.assists || 0,
@@ -211,7 +211,7 @@ export class MatchesService {
   // Estadísticas generales
   async getTopScorers(limit: number = 10) {
     const result = await this.prisma.playerStats.groupBy({
-      by: ['playerId'],
+      by: ['userId'],
       _sum: {
         goals: true,
       },
@@ -226,13 +226,12 @@ export class MatchesService {
     // Obtener información de los jugadores
     const playersWithStats = await Promise.all(
       result.map(async (stat) => {
-        const player = await this.prisma.player.findUnique({
-          where: { id: stat.playerId },
-          include: { user: true },
+        const user = await this.prisma.user.findUnique({
+          where: { id: stat.userId },
         });
         return {
-          player,
-          totalGoals: stat._sum.goals || 0,
+          user,
+          totalGoals: stat._sum?.goals || 0,
         };
       }),
     );
@@ -242,7 +241,7 @@ export class MatchesService {
 
   async getTopAssists(limit: number = 10) {
     const result = await this.prisma.playerStats.groupBy({
-      by: ['playerId'],
+      by: ['userId'],
       _sum: {
         assists: true,
       },
@@ -256,13 +255,12 @@ export class MatchesService {
 
     const playersWithStats = await Promise.all(
       result.map(async (stat) => {
-        const player = await this.prisma.player.findUnique({
-          where: { id: stat.playerId },
-          include: { user: true },
+        const user = await this.prisma.user.findUnique({
+          where: { id: stat.userId },
         });
         return {
-          player,
-          totalAssists: stat._sum.assists || 0,
+          user,
+          totalAssists: stat._sum?.assists || 0,
         };
       }),
     );

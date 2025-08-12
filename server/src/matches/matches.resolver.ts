@@ -57,9 +57,9 @@ export class MatchesResolver {
   @Mutation(() => Match)
   async removePlayerFromMatch(
     @Args('matchId') matchId: string,
-    @Args('playerId') playerId: string,
+    @Args('userId') userId: string,
   ) {
-    return this.matchesService.removePlayerFromMatch(matchId, playerId);
+    return this.matchesService.removePlayerFromMatch(matchId, userId);
   }
 
   @Mutation(() => Boolean)

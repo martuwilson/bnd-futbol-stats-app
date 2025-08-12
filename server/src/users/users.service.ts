@@ -15,7 +15,7 @@ export class UsersService {
       data: {
         ...data,
         password: hashedPassword,
-        role: data.role || UserRole.MANAGER, // Por defecto MANAGER
+        role: data.role || UserRole.VIEWER, // Por defecto VIEWER
       },
     });
   }

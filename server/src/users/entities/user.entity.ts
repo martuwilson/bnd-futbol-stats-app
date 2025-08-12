@@ -28,6 +28,9 @@ export class User {
   @Field(() => UserRole)
   role: UserRole;
 
+  @Field({ nullable: true })
+  position?: string; // Posición como jugador
+
   @Field()
   isActive: boolean;
 

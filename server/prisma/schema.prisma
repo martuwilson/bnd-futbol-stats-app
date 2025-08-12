@@ -18,7 +18,7 @@ enum UserRole {
   VIEWER    // Puede ver estadísticas y sumarse a convocatorias
 }
 
-// Usuario que administra los jugadores y partidos
+// Usuario que es también jugador
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
@@ -26,39 +26,26 @@ model User {
   nickname  String?
   password  String
   role      UserRole @default(VIEWER)  // Por defecto VIEWER
+  
+  // Campos de jugador (ahora parte del User)
+  position  String?  // "Defensor", "Mediocampista", "Delantero", "Arquero"
   isActive  Boolean  @default(true)
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   // Relaciones
-  players Player[]
-  matches Match[]
-  callUpResponses CallUpResponse[]
-  createdCallUps  CallUp[]
-
-  @@map("users")
-}
-
-// Jugadores del equipo
-model Player {
-  id        String   @id @default(cuid())
-  name      String
-  nickname  String?
-  position  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Relaciones
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  // Participaciones en partidos
+  matches Match[]  // Partidos que organizó
+  callUpResponses CallUpResponse[]  // Sus respuestas a convocatorias
+  createdCallUps  CallUp[]  // Convocatorias que creó
+  
+  // Participaciones en partidos (como jugador)
   matchPlayers MatchPlayer[]
   
-  // Estadísticas
+  // Estadísticas como jugador
   playerStats PlayerStats[]
 
-  @@map("players")
+  @@map("users")
 }
 
 // Partidos
@@ -87,23 +74,23 @@ model Match {
   @@map("matches")
 }
 
-// Relación many-to-many entre jugadores y partidos
+// Relación many-to-many entre usuarios/jugadores y partidos
 model MatchPlayer {
   id     String @id @default(cuid())
   team   Int    // 1 o 2 para indicar en qué equipo jugó
   
   // Relaciones
-  playerId String
-  player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  userId String
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   matchId String
   match   Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
 
-  @@unique([playerId, matchId])
+  @@unique([userId, matchId])
   @@map("match_players")
 }
 
-// Estadísticas individuales por jugador en cada partido
+// Estadísticas individuales por usuario/jugador en cada partido
 model PlayerStats {
   id         String @id @default(cuid())
   goals      Int    @default(0)
@@ -112,13 +99,13 @@ model PlayerStats {
   redCards   Int    @default(0)
   
   // Relaciones
-  playerId String
-  player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  userId String
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   matchId String
   match   Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
 
-  @@unique([playerId, matchId])
+  @@unique([userId, matchId])
   @@map("player_stats")
 }
 

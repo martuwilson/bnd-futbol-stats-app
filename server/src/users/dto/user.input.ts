@@ -25,6 +25,10 @@ export class CreateUserInput {
   @IsOptional()
   @IsEnum(UserRole)
   role?: UserRole;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  position?: string; // Posición como jugador
 }
 
 @InputType()
@@ -36,6 +40,10 @@ export class UpdateUserInput {
   @Field({ nullable: true })
   @IsOptional()
   nickname?: string;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  position?: string; // Posición como jugador
 
   @Field(() => UserRole, { nullable: true })
   @IsOptional()

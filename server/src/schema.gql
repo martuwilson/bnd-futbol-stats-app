@@ -2,11 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-input AddPlayerToMatchInput {
-  playerId: String!
-  team: Int!
-}
-
 type CallUp {
   createdAt: DateTime!
   createdBy: User!
@@ -42,26 +37,12 @@ input CreateCallUpInput {
   title: String!
 }
 
-input CreateMatchInput {
-  date: String!
-  notes: String
-  team1Name: String
-  team2Name: String
-  userId: String!
-}
-
-input CreatePlayerInput {
-  name: String!
-  nickname: String
-  position: String
-  userId: String!
-}
-
 input CreateUserInput {
   email: String!
   name: String!
   nickname: String
   password: String!
+  position: Position
   role: UserRole
 }
 
@@ -76,52 +57,25 @@ input JoinCallUpInput {
   userId: String!
 }
 
-type Match {
-  createdAt: DateTime!
-  date: DateTime!
-  id: ID!
-  isFinished: Boolean!
-  notes: String
-  team1Goals: Int!
-  team1Name: String!
-  team2Goals: Int!
-  team2Name: String!
-  updatedAt: DateTime!
-  user: User!
-  userId: String!
-}
-
 type Mutation {
-  addPlayerToMatch(data: AddPlayerToMatchInput!, matchId: String!): Match!
   closeCallUp(id: String!): CallUp!
   createCallUp(data: CreateCallUpInput!): CallUp!
-  createMatch(data: CreateMatchInput!): Match!
-  createPlayer(data: CreatePlayerInput!): Player!
   createUser(data: CreateUserInput!): User!
   deleteCallUp(id: String!): Boolean!
-  deleteMatch(id: String!): Boolean!
-  deletePlayer(id: String!): Boolean!
   deleteUser(id: String!): Boolean!
   joinCallUp(data: JoinCallUpInput!): CallUp!
   leaveCallUp(callUpId: String!, userId: String!): CallUp!
   makeUserAdmin(userId: String!): User!
-  removePlayerFromMatch(matchId: String!, playerId: String!): Match!
   updateCallUp(data: UpdateCallUpInput!, id: String!): CallUp!
-  updateMatch(data: UpdateMatchInput!, id: String!): Match!
-  updatePlayer(data: UpdatePlayerInput!, id: String!): Player!
-  updatePlayerStats(data: UpdatePlayerStatsInput!, matchId: String!): Boolean!
   updateUser(data: UpdateUserInput!, id: String!): User!
 }
 
-type Player {
-  createdAt: DateTime!
-  id: ID!
-  name: String!
-  nickname: String
-  position: String
-  updatedAt: DateTime!
-  user: User!
-  userId: String!
+"""Las posiciones disponibles para los jugadores"""
+enum Position {
+  DEFENDER
+  FORWARD
+  GOALKEEPER
+  MIDFIELDER
 }
 
 type Query {
@@ -130,12 +84,6 @@ type Query {
   callUp(id: String!): CallUp
   callUps: [CallUp!]!
   isAdmin(userId: String!): Boolean!
-  match(id: String!): Match
-  matches: [Match!]!
-  matchesByUser(userId: String!): [Match!]!
-  player(id: String!): Player
-  players: [Player!]!
-  playersByUser(userId: String!): [Player!]!
   user(id: String!): User
   users: [User!]!
 }
@@ -149,34 +97,11 @@ input UpdateCallUpInput {
   title: String
 }
 
-input UpdateMatchInput {
-  date: String
-  isFinished: Boolean
-  notes: String
-  team1Goals: Int
-  team1Name: String
-  team2Goals: Int
-  team2Name: String
-}
-
-input UpdatePlayerInput {
-  name: String
-  nickname: String
-  position: String
-}
-
-input UpdatePlayerStatsInput {
-  assists: Int
-  goals: Int
-  playerId: String!
-  redCards: Int
-  yellowCards: Int
-}
-
 input UpdateUserInput {
   isActive: Boolean
   name: String
   nickname: String
+  position: Position
   role: UserRole
 }
 
@@ -187,6 +112,7 @@ type User {
   isActive: Boolean!
   name: String!
   nickname: String
+  position: Position
   role: UserRole!
   updatedAt: DateTime!
 }

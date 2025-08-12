@@ -1,6 +1,6 @@
 import { InputType, Field } from '@nestjs/graphql';
 import { IsEmail, IsNotEmpty, MinLength, IsOptional, IsEnum } from 'class-validator';
-import { UserRole } from '../entities/user.entity';
+import { UserRole, Position } from '../entities/user.entity';
 
 @InputType()
 export class CreateUserInput {
@@ -26,9 +26,10 @@ export class CreateUserInput {
   @IsEnum(UserRole)
   role?: UserRole;
 
-  @Field({ nullable: true })
+  @Field(() => Position, { nullable: true })
   @IsOptional()
-  position?: string; // Posición como jugador
+  @IsEnum(Position)
+  position?: Position; // Posición como jugador
 }
 
 @InputType()
@@ -41,9 +42,10 @@ export class UpdateUserInput {
   @IsOptional()
   nickname?: string;
 
-  @Field({ nullable: true })
+  @Field(() => Position, { nullable: true })
   @IsOptional()
-  position?: string; // Posición como jugador
+  @IsEnum(Position)
+  position?: Position; // Posición como jugador
 
   @Field(() => UserRole, { nullable: true })
   @IsOptional()

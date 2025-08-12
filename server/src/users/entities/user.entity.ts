@@ -6,9 +6,21 @@ export enum UserRole {
   VIEWER = 'VIEWER'
 }
 
+export enum Position {
+  GOALKEEPER = 'GOALKEEPER',
+  DEFENDER = 'DEFENDER',
+  MIDFIELDER = 'MIDFIELDER',
+  FORWARD = 'FORWARD'
+}
+
 registerEnumType(UserRole, {
   name: 'UserRole',
   description: 'Los roles disponibles para los usuarios'
+});
+
+registerEnumType(Position, {
+  name: 'Position',
+  description: 'Las posiciones disponibles para los jugadores'
 });
 
 @ObjectType()
@@ -28,8 +40,8 @@ export class User {
   @Field(() => UserRole)
   role: UserRole;
 
-  @Field({ nullable: true })
-  position?: string; // Posición como jugador
+  @Field(() => Position, { nullable: true })
+  position?: Position; // Posición como jugador
 
   @Field()
   isActive: boolean;

@@ -64,7 +64,7 @@ export class UpdateMatchInput {
 export class AddPlayerToMatchInput {
   @Field()
   @IsNotEmpty()
-  playerId: string;
+  userId: string; // Cambiado de playerId a userId
 
   @Field(() => Int)
   @IsInt()
@@ -76,7 +76,7 @@ export class AddPlayerToMatchInput {
 export class UpdatePlayerStatsInput {
   @Field()
   @IsNotEmpty()
-  playerId: string;
+  userId: string; // Cambiado de playerId a userId
 
   @Field(() => Int, { nullable: true })
   @IsOptional()

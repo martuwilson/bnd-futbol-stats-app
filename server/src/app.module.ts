@@ -6,7 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
-import { MatchesModule } from './matches/matches.module';
+// import { MatchesModule } from './matches/matches.module'; // Temporalmente deshabilitado
 import { CallUpsModule } from './call-ups/call-ups.module';
 
 @Module({
@@ -20,7 +20,7 @@ import { CallUpsModule } from './call-ups/call-ups.module';
     }),
     PrismaModule,
     UsersModule,
-    MatchesModule,
+    // MatchesModule, // Temporalmente deshabilitado
     CallUpsModule,
   ],
   controllers: [AppController],

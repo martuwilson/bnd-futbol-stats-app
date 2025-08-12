@@ -1,0 +1,125 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input AddPlayerToMatchInput {
+  playerId: String!
+  team: Int!
+}
+
+input CreateMatchInput {
+  date: String!
+  notes: String
+  team1Name: String
+  team2Name: String
+  userId: String!
+}
+
+input CreatePlayerInput {
+  name: String!
+  nickname: String
+  position: String
+  userId: String!
+}
+
+input CreateUserInput {
+  email: String!
+  name: String!
+  nickname: String
+  password: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Match {
+  createdAt: DateTime!
+  date: DateTime!
+  id: ID!
+  isFinished: Boolean!
+  notes: String
+  team1Goals: Int!
+  team1Name: String!
+  team2Goals: Int!
+  team2Name: String!
+  updatedAt: DateTime!
+  user: User!
+  userId: String!
+}
+
+type Mutation {
+  addPlayerToMatch(data: AddPlayerToMatchInput!, matchId: String!): Match!
+  createMatch(data: CreateMatchInput!): Match!
+  createPlayer(data: CreatePlayerInput!): Player!
+  createUser(data: CreateUserInput!): User!
+  deleteMatch(id: String!): Boolean!
+  deletePlayer(id: String!): Boolean!
+  deleteUser(id: String!): Boolean!
+  removePlayerFromMatch(matchId: String!, playerId: String!): Match!
+  updateMatch(data: UpdateMatchInput!, id: String!): Match!
+  updatePlayer(data: UpdatePlayerInput!, id: String!): Player!
+  updatePlayerStats(data: UpdatePlayerStatsInput!, matchId: String!): Boolean!
+  updateUser(data: UpdateUserInput!, id: String!): User!
+}
+
+type Player {
+  createdAt: DateTime!
+  id: ID!
+  name: String!
+  nickname: String
+  position: String
+  updatedAt: DateTime!
+  user: User!
+  userId: String!
+}
+
+type Query {
+  match(id: String!): Match
+  matches: [Match!]!
+  matchesByUser(userId: String!): [Match!]!
+  player(id: String!): Player
+  players: [Player!]!
+  playersByUser(userId: String!): [Player!]!
+  user(id: String!): User
+  users: [User!]!
+}
+
+input UpdateMatchInput {
+  date: String
+  isFinished: Boolean
+  notes: String
+  team1Goals: Int
+  team1Name: String
+  team2Goals: Int
+  team2Name: String
+}
+
+input UpdatePlayerInput {
+  name: String
+  nickname: String
+  position: String
+}
+
+input UpdatePlayerStatsInput {
+  assists: Int
+  goals: Int
+  playerId: String!
+  redCards: Int
+  yellowCards: Int
+}
+
+input UpdateUserInput {
+  name: String
+  nickname: String
+}
+
+type User {
+  createdAt: DateTime!
+  email: String!
+  id: ID!
+  name: String!
+  nickname: String
+  updatedAt: DateTime!
+}

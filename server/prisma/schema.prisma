@@ -1,0 +1,112 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Usuario que administra los jugadores y partidos
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  nickname  String?
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relaciones
+  players Player[]
+  matches Match[]
+
+  @@map("users")
+}
+
+// Jugadores del equipo
+model Player {
+  id        String   @id @default(cuid())
+  name      String
+  nickname  String?
+  position  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relaciones
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Participaciones en partidos
+  matchPlayers MatchPlayer[]
+  
+  // Estadísticas
+  playerStats PlayerStats[]
+
+  @@map("players")
+}
+
+// Partidos
+model Match {
+  id          String    @id @default(cuid())
+  date        DateTime
+  team1Name   String    @default("Equipo 1")
+  team2Name   String    @default("Equipo 2")
+  team1Goals  Int       @default(0)
+  team2Goals  Int       @default(0)
+  isFinished  Boolean   @default(false)
+  notes       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relaciones
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Jugadores participantes
+  matchPlayers MatchPlayer[]
+  
+  // Estadísticas del partido
+  playerStats PlayerStats[]
+
+  @@map("matches")
+}
+
+// Relación many-to-many entre jugadores y partidos
+model MatchPlayer {
+  id     String @id @default(cuid())
+  team   Int    // 1 o 2 para indicar en qué equipo jugó
+  
+  // Relaciones
+  playerId String
+  player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  
+  matchId String
+  match   Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, matchId])
+  @@map("match_players")
+}
+
+// Estadísticas individuales por jugador en cada partido
+model PlayerStats {
+  id         String @id @default(cuid())
+  goals      Int    @default(0)
+  assists    Int    @default(0)
+  yellowCards Int   @default(0)
+  redCards   Int    @default(0)
+  
+  // Relaciones
+  playerId String
+  player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  
+  matchId String
+  match   Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, matchId])
+  @@map("player_stats")
+}

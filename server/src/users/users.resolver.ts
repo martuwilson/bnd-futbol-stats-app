@@ -35,4 +35,20 @@ export class UsersResolver {
     await this.usersService.deleteUser(id);
     return true;
   }
+
+  // Queries específicas para administración
+  @Query(() => [User], { name: 'admins' })
+  async findAdmins() {
+    return this.usersService.findAdmins();
+  }
+
+  @Mutation(() => User)
+  async makeUserAdmin(@Args('userId') userId: string) {
+    return this.usersService.makeUserAdmin(userId);
+  }
+
+  @Query(() => Boolean, { name: 'isAdmin' })
+  async isAdmin(@Args('userId') userId: string) {
+    return this.usersService.isAdmin(userId);
+  }
 }

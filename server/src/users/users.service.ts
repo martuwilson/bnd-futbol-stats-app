@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserInput, UpdateUserInput } from './dto/user.input';
+import { UserRole } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -14,6 +15,7 @@ export class UsersService {
       data: {
         ...data,
         password: hashedPassword,
+        role: data.role || UserRole.MANAGER, // Por defecto MANAGER
       },
     });
   }
@@ -25,6 +27,8 @@ export class UsersService {
         email: true,
         name: true,
         nickname: true,
+        role: true,
+        isActive: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -39,6 +43,8 @@ export class UsersService {
         email: true,
         name: true,
         nickname: true,
+        role: true,
+        isActive: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -60,6 +66,8 @@ export class UsersService {
         email: true,
         name: true,
         nickname: true,
+        role: true,
+        isActive: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -70,5 +78,47 @@ export class UsersService {
     return this.prisma.user.delete({
       where: { id },
     });
+  }
+
+  // Métodos específicos para roles
+  async findAdmins() {
+    return this.prisma.user.findMany({
+      where: { role: UserRole.ADMIN },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        nickname: true,
+        role: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  }
+
+  async makeUserAdmin(userId: string) {
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: { role: UserRole.ADMIN },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        nickname: true,
+        role: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  }
+
+  async isAdmin(userId: string): Promise<boolean> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { role: true },
+    });
+    return user?.role === UserRole.ADMIN;
   }
 }

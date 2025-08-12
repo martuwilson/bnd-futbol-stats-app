@@ -11,6 +11,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Enum para roles de usuario
+enum UserRole {
+  ADMIN     // Administrador total (tú) - puede gestionar todo
+  MANAGER   // Administrador de equipo - puede gestionar jugadores y partidos
+  VIEWER    // Puede ver estadísticas y sumarse a convocatorias
+}
+
 // Usuario que administra los jugadores y partidos
 model User {
   id        String   @id @default(cuid())
@@ -18,12 +25,16 @@ model User {
   name      String
   nickname  String?
   password  String
+  role      UserRole @default(VIEWER)  // Por defecto VIEWER
+  isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   // Relaciones
   players Player[]
   matches Match[]
+  callUpResponses CallUpResponse[]
+  createdCallUps  CallUp[]
 
   @@map("users")
 }
@@ -109,4 +120,44 @@ model PlayerStats {
 
   @@unique([playerId, matchId])
   @@map("player_stats")
+}
+
+// Convocatorias para partidos (como la lista de WhatsApp)
+model CallUp {
+  id          String    @id @default(cuid())
+  title       String    // "Futbol en Banade - Lunes (fecha) - (hora)"
+  description String?   // Descripción adicional
+  matchDate   DateTime  // Fecha y hora del partido
+  location    String?   // Lugar del partido
+  maxPlayers  Int?      // Límite de jugadores (opcional)
+  isOpen      Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relaciones
+  createdById String
+  createdBy   User   @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  
+  responses   CallUpResponse[]
+
+  @@map("call_ups")
+}
+
+// Respuestas a las convocatorias (quien se apunta)
+model CallUpResponse {
+  id        String   @id @default(cuid())
+  position  Int      // Posición en la lista (1, 2, 3, etc.)
+  message   String?  // Mensaje opcional del usuario
+  createdAt DateTime @default(now())
+  
+  // Relaciones
+  callUpId String
+  callUp   CallUp @relation(fields: [callUpId], references: [id], onDelete: Cascade)
+  
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([callUpId, userId]) // Un usuario solo puede responder una vez por convocatoria
+  @@unique([callUpId, position]) // Una posición solo puede estar ocupada por un usuario
+  @@map("call_up_responses")
 }

@@ -8,6 +8,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 import { PlayersModule } from './players/players.module';
 import { MatchesModule } from './matches/matches.module';
+import { CallUpsModule } from './call-ups/call-ups.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { MatchesModule } from './matches/matches.module';
     UsersModule,
     PlayersModule,
     MatchesModule,
+    CallUpsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

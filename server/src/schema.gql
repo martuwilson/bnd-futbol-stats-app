@@ -7,6 +7,41 @@ input AddPlayerToMatchInput {
   team: Int!
 }
 
+type CallUp {
+  createdAt: DateTime!
+  createdBy: User!
+  createdById: String!
+  description: String
+  id: ID!
+  isOpen: Boolean!
+  location: String
+  matchDate: DateTime!
+  maxPlayers: Int
+  responses: [CallUpResponse!]!
+  title: String!
+  updatedAt: DateTime!
+}
+
+type CallUpResponse {
+  callUp: CallUp!
+  callUpId: String!
+  createdAt: DateTime!
+  id: ID!
+  message: String
+  position: Int!
+  user: User!
+  userId: String!
+}
+
+input CreateCallUpInput {
+  createdById: String!
+  description: String
+  location: String
+  matchDate: String!
+  maxPlayers: Int
+  title: String!
+}
+
 input CreateMatchInput {
   date: String!
   notes: String
@@ -27,12 +62,19 @@ input CreateUserInput {
   name: String!
   nickname: String
   password: String!
+  role: UserRole
 }
 
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+input JoinCallUpInput {
+  callUpId: String!
+  message: String
+  userId: String!
+}
 
 type Match {
   createdAt: DateTime!
@@ -51,13 +93,20 @@ type Match {
 
 type Mutation {
   addPlayerToMatch(data: AddPlayerToMatchInput!, matchId: String!): Match!
+  closeCallUp(id: String!): CallUp!
+  createCallUp(data: CreateCallUpInput!): CallUp!
   createMatch(data: CreateMatchInput!): Match!
   createPlayer(data: CreatePlayerInput!): Player!
   createUser(data: CreateUserInput!): User!
+  deleteCallUp(id: String!): Boolean!
   deleteMatch(id: String!): Boolean!
   deletePlayer(id: String!): Boolean!
   deleteUser(id: String!): Boolean!
+  joinCallUp(data: JoinCallUpInput!): CallUp!
+  leaveCallUp(callUpId: String!, userId: String!): CallUp!
+  makeUserAdmin(userId: String!): User!
   removePlayerFromMatch(matchId: String!, playerId: String!): Match!
+  updateCallUp(data: UpdateCallUpInput!, id: String!): CallUp!
   updateMatch(data: UpdateMatchInput!, id: String!): Match!
   updatePlayer(data: UpdatePlayerInput!, id: String!): Player!
   updatePlayerStats(data: UpdatePlayerStatsInput!, matchId: String!): Boolean!
@@ -76,6 +125,11 @@ type Player {
 }
 
 type Query {
+  activeCallUps: [CallUp!]!
+  admins: [User!]!
+  callUp(id: String!): CallUp
+  callUps: [CallUp!]!
+  isAdmin(userId: String!): Boolean!
   match(id: String!): Match
   matches: [Match!]!
   matchesByUser(userId: String!): [Match!]!
@@ -84,6 +138,15 @@ type Query {
   playersByUser(userId: String!): [Player!]!
   user(id: String!): User
   users: [User!]!
+}
+
+input UpdateCallUpInput {
+  description: String
+  isOpen: Boolean
+  location: String
+  matchDate: String
+  maxPlayers: Int
+  title: String
 }
 
 input UpdateMatchInput {
@@ -111,15 +174,26 @@ input UpdatePlayerStatsInput {
 }
 
 input UpdateUserInput {
+  isActive: Boolean
   name: String
   nickname: String
+  role: UserRole
 }
 
 type User {
   createdAt: DateTime!
   email: String!
   id: ID!
+  isActive: Boolean!
   name: String!
   nickname: String
+  role: UserRole!
   updatedAt: DateTime!
+}
+
+"""Los roles disponibles para los usuarios"""
+enum UserRole {
+  ADMIN
+  MANAGER
+  VIEWER
 }

@@ -9,6 +9,7 @@ import { UsersModule } from './users/users.module';
 import { MatchesModule } from './matches/matches.module'; // Reactivado
 import { CallUpsModule } from './call-ups/call-ups.module';
 import { StatisticsModule } from './statistics/statistics.module'; // Reactivado
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { StatisticsModule } from './statistics/statistics.module'; // Reactivado
       introspection: true,
     }),
     PrismaModule,
+    AuthModule,
     UsersModule,
     MatchesModule, // Reactivado
     CallUpsModule, 

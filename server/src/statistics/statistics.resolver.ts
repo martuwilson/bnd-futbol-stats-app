@@ -1,4 +1,5 @@
 import { Resolver, Query, Args } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
 import { StatisticsService } from './statistics.service';
 import { 
   PlayerStatistics, 
@@ -13,6 +14,9 @@ import {
   MatchAnalysisInput, 
   RankingInput 
 } from './dto/statistics.input';
+import { RolesGuard } from '../auth/roles/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { UserRole } from '../users/entities/user.entity';
 
 @Resolver()
 export class StatisticsResolver {
@@ -37,11 +41,15 @@ export class StatisticsResolver {
   }
 
   @Query(() => ComparisonStatistics, { name: 'comparePlayersStatistics' })
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.MANAGER)
   async comparePlayersStatistics(@Args('input') input: PlayerComparisonInput) {
     return this.statisticsService.comparePlayersStatistics(input);
   }
 
   @Query(() => SeasonStatistics, { name: 'seasonStatistics' })
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.MANAGER, UserRole.VIEWER)
   async getSeasonStatistics(
     @Args('filter', { nullable: true }) filter?: StatisticsFilterInput,
   ) {

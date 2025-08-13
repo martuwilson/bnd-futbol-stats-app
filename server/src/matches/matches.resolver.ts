@@ -1,4 +1,5 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
 import { MatchesService } from './matches.service';
 import { Match } from './entities/match.entity';
 import { 
@@ -7,12 +8,17 @@ import {
   AddPlayerToMatchInput, 
   UpdatePlayerStatsInput 
 } from './dto/match.input';
+import { RolesGuard } from '../auth/roles/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { UserRole } from '../users/entities/user.entity';
 
 @Resolver(() => Match)
 export class MatchesResolver {
   constructor(private readonly matchesService: MatchesService) {}
 
   @Mutation(() => Match)
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.MANAGER)
   async createMatch(@Args('data') createMatchInput: CreateMatchInput) {
     return this.matchesService.createMatch(createMatchInput);
   }
@@ -33,6 +39,8 @@ export class MatchesResolver {
   }
 
   @Mutation(() => Match)
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.MANAGER)
   async updateMatch(
     @Args('id') id: string,
     @Args('data') updateMatchInput: UpdateMatchInput,
@@ -41,6 +49,8 @@ export class MatchesResolver {
   }
 
   @Mutation(() => Boolean)
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
   async deleteMatch(@Args('id') id: string) {
     await this.matchesService.deleteMatch(id);
     return true;
@@ -63,6 +73,8 @@ export class MatchesResolver {
   }
 
   @Mutation(() => Boolean)
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.MANAGER)
   async updatePlayerStats(
     @Args('matchId') matchId: string,
     @Args('data') updateStatsInput: UpdatePlayerStatsInput,

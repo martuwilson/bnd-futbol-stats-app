@@ -7,6 +7,12 @@ input AddPlayerToMatchInput {
   userId: String!
 }
 
+type AuthResponse {
+  accessToken: String!
+  refreshToken: String!
+  user: User!
+}
+
 type CallUp {
   createdAt: DateTime!
   createdBy: User!
@@ -79,6 +85,11 @@ input JoinCallUpInput {
   userId: String!
 }
 
+input LoginInput {
+  email: String!
+  password: String!
+}
+
 type Match {
   createdAt: DateTime!
   date: DateTime!
@@ -132,7 +143,10 @@ type Mutation {
   deleteUser(id: String!): Boolean!
   joinCallUp(data: JoinCallUpInput!): CallUp!
   leaveCallUp(callUpId: String!, userId: String!): CallUp!
+  login(input: LoginInput!): AuthResponse!
   makeUserAdmin(userId: String!): User!
+  refreshToken(input: RefreshTokenInput!): RefreshResponse!
+  register(input: RegisterInput!): AuthResponse!
   removePlayerFromMatch(matchId: String!, userId: String!): Match!
   updateCallUp(data: UpdateCallUpInput!, id: String!): CallUp!
   updateMatch(data: UpdateMatchInput!, id: String!): Match!
@@ -212,6 +226,21 @@ input RankingInput {
   limit: Int
   position: String
   startDate: String
+}
+
+type RefreshResponse {
+  accessToken: String!
+}
+
+input RefreshTokenInput {
+  refreshToken: String!
+}
+
+input RegisterInput {
+  email: String!
+  name: String!
+  password: String!
+  role: UserRole = VIEWER
 }
 
 type SeasonStatistics {

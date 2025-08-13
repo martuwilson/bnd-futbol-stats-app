@@ -24,41 +24,50 @@ export class RolesGuard implements CanActivate {
 
     // Obtener el contexto GraphQL
     const ctx = GqlExecutionContext.create(context);
+    const request = ctx.getContext().req;
     const args = ctx.getArgs();
     
-    // Buscar userId en los argumentos
     let userId: string | null = null;
-    
-    // Buscar en argumentos directos
-    if (args.userId) {
-      userId = args.userId;
+    let userRole: UserRole | null = null;
+
+    // Método 1: Usuario autenticado via JWT (preferido)
+    if (request.user) {
+      userId = request.user.id;
+      userRole = request.user.role;
     }
-    // Buscar en input/data objects
-    else if (args.data?.userId) {
-      userId = args.data.userId;
+    // Método 2: Header personalizado (fallback para testing)
+    else if (request.headers['x-user-id']) {
+      userId = request.headers['x-user-id'];
     }
-    else if (args.input?.userId) {
-      userId = args.input.userId;
-    }
-    // Para mutations de crear usuario, el usuario está en el data
-    else if (args.data?.id) {
-      userId = args.data.id;
+    // Método 3: Buscar en argumentos (fallback adicional)
+    else {
+      if (args.userId) {
+        userId = args.userId;
+      } else if (args.data?.userId) {
+        userId = args.data.userId;
+      } else if (args.input?.userId) {
+        userId = args.input.userId;
+      } else if (args.data?.id) {
+        userId = args.data.id;
+      }
     }
 
     if (!userId) {
-      // Si no se proporciona userId, denegar acceso para operaciones que requieren roles
-      return false;
+      return false; // No se puede identificar al usuario
     }
 
     try {
-      // Verificar si el usuario existe y obtener su rol
-      const user = await this.usersService.findOne(userId);
-      if (!user) {
-        return false;
+      // Si ya tenemos el rol del JWT, usarlo. Si no, consultarlo.
+      if (!userRole) {
+        const user = await this.usersService.findOne(userId);
+        if (!user) {
+          return false;
+        }
+        userRole = user.role as UserRole;
       }
 
       // Verificar si el rol del usuario está en los roles requeridos
-      return requiredRoles.some((role) => user.role === role);
+      return requiredRoles.some((role) => userRole === role);
     } catch (error) {
       return false;
     }

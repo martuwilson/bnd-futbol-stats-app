@@ -1,13 +1,19 @@
 # ⚽ Fútbol Stats App
 
 > **🚀 Backend Production-Ready** | **📱 Mobile-First De### 🔄 **PRÓXIMO PASO**
-#### 🌐 **Frontend Web (/client) - EN DESARROLLO** 🔄
-- **Framework**: React + TypeScript
-- **Build Tool**: Vite
+#### 🌐### 🌐 **Frontend Web (/client) - EN DESARROLLO** 🔄
+- **Framework**: React + TypeScript + Vite ⚡
+- **Estado**: Apollo Client (GraphQL)
+- **Navegación**: React Router DOM
+- **Estilos**: TailwindCSS (mobile-first)
+- **Autenticación**: JWT integrado
+- **Target**: SPA para navegadores móvilestend Web (/client) - EN DESARROLLO** 🔄
+- **Framework**: React + TypeScript + Vite ⚡
 - **Estado**: Apollo Client (GraphQL)
 - **Estilos**: TailwindCSS (mobile-first)
 - **Autenticación**: JWT integrado
-- **Target**: Navegadores móviles y desktop Paso G - Frontend Web Mobile-First** (En preparación)
+- **Target**: SPA optimizada para móviles
+- **Deploy**: Static hosting (Netlify/Vercel)
 - Interfaz web responsive (mobile-first)
 - React + TypeScript + TailwindCSS
 - Integración con backend JWT
@@ -386,16 +392,18 @@ mutation CreateMatch {
 
 ```
 futbol-stats-app/
-├── 🌐 client/                     # Frontend React (próximamente)
+├── 🌐 client/                     # Frontend React + Vite (próximamente)
 │   ├── src/
 │   │   ├── components/           # Componentes reutilizables
-│   │   ├── pages/                # Páginas de la aplicación
+│   │   ├── pages/                # Páginas SPA
 │   │   ├── hooks/                # Custom hooks
-│   │   ├── services/             # Apollo Client & API
+│   │   ├── services/             # Apollo Client & GraphQL
 │   │   ├── styles/               # TailwindCSS mobile-first
+│   │   ├── router/               # React Router DOM
 │   │   └── utils/                # Utilidades y helpers
-│   ├── index.html                # Entry point
-│   ├── vite.config.ts            # Configuración Vite
+│   ├── index.html                # Entry point SPA
+│   ├── vite.config.ts            # Configuración Vite ⚡
+│   ├── tailwind.config.js        # TailwindCSS mobile-first
 │   └── package.json
 │
 ├── 🔵 server/                     # Backend NestJS (PRODUCTION READY)

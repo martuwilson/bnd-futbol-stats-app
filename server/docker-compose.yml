@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  # 🗃️ PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: futbol-stats-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: futbolstats
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - futbol-network
+
+  # 🚀 NestJS API Server
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: futbol-stats-api
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/futbolstats
+      JWT_SECRET: your-production-jwt-secret-change-this
+      JWT_REFRESH_SECRET: your-production-refresh-secret-change-this
+      PORT: 3002
+    ports:
+      - "3002:3002"
+    depends_on:
+      - postgres
+    networks:
+      - futbol-network
+    command: sh -c "npx prisma migrate deploy && node dist/main"
+
+  # 📊 Redis Cache (future feature)
+  redis:
+    image: redis:7-alpine
+    container_name: futbol-stats-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - futbol-network
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  futbol-network:
+    driver: bridge

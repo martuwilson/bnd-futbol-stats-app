@@ -1,5 +1,35 @@
 # ⚽ Fútbol Stats App
 
+> **🚀 Backend Production-Ready** | **📱 Mobile-First De### 🔄 **PRÓXIMO PASO**
+#### 🌐 **Frontend Web (/client) - EN DESARROLLO** 🔄
+- **Framework**: React + TypeScript
+- **Build Tool**: Vite
+- **Estado**: Apollo Client (GraphQL)
+- **Estilos**: TailwindCSS (mobile-first)
+- **Autenticación**: JWT integrado
+- **Target**: Navegadores móviles y desktop Paso G - Frontend Web Mobile-First** (En preparación)
+- Interfaz web responsive (mobile-first)
+- React + TypeScript + TailwindCSS
+- Integración con backend JWT
+- Optimizada para navegadores móviles | **🏆 WhatsApp Group Optimized**
+
+Una aplicación moderna y completa para gestionar estadísticas de fútbol amateur, diseñada especialmente para grupos de WhatsApp. Con un backend robusto y una interfaz web responsive mobile-first.
+
+## 🎯 Enfoque del Proyecto
+
+### 📱 **Mobile-First Design**
+- Diseño responsive que se adapta primero a móviles
+- Interfaz web optimizada para dispositivos móviles
+- Acceso desde cualquier navegador móvil
+- Optimizado para compartir resultados en grupos de WhatsApp
+
+### 🏗️ **Arquitectura Robusta**
+- Backend NestJS production-ready
+- API GraphQL con autenticación JWT
+- Base de datos PostgreSQL optimizada
+- Docker para despliegue simplificado
+- Testing completo (15 tests unitarios + 5 E2E)
+
 > **🚀 Backend Production-Ready** | **📱 Mobile-First Architecture** | **🏆 WhatsApp Group Optimized**
 
 Una aplicación moderna y completa para gestionar estadísticas de fútbol amateur, diseñada especialmente para grupos de WhatsApp. Con un backend robusto y una futura aplicación móvil React Native.
@@ -356,13 +386,16 @@ mutation CreateMatch {
 
 ```
 futbol-stats-app/
-├── 📱 mobile/                     # App React Native (próximamente)
+├── 🌐 client/                     # Frontend React (próximamente)
 │   ├── src/
 │   │   ├── components/           # Componentes reutilizables
-│   │   ├── screens/              # Pantallas de la app
-│   │   ├── navigation/           # Configuración de navegación
+│   │   ├── pages/                # Páginas de la aplicación
+│   │   ├── hooks/                # Custom hooks
 │   │   ├── services/             # Apollo Client & API
+│   │   ├── styles/               # TailwindCSS mobile-first
 │   │   └── utils/                # Utilidades y helpers
+│   ├── index.html                # Entry point
+│   ├── vite.config.ts            # Configuración Vite
 │   └── package.json
 │
 ├── 🔵 server/                     # Backend NestJS (PRODUCTION READY)
@@ -470,21 +503,21 @@ npm run test:cov
 
 ### 🔄 **EN DESARROLLO**
 
-#### **Fase 2: Mobile App** (Próximo)
-- [ ] **Paso G**: React Native App - Interfaz mobile-first
-- [ ] **Paso H**: WhatsApp Integration - Optimización para grupos
-- [ ] **Paso I**: Offline Support - Funcionalidad sin conexión
-- [ ] **Paso J**: Push Notifications - Alertas en tiempo real
+#### **Fase 2: Frontend Web** (Próximo)
+- [ ] **Paso G**: Frontend React - Interfaz web mobile-first
+- [ ] **Paso H**: UI/UX TailwindCSS - Diseño responsive moderno
+- [ ] **Paso I**: PWA Support - Funcionalidad como app móvil
+- [ ] **Paso J**: Offline Support - Funcionalidad sin conexión
 
 ### 📋 **ROADMAP FUTURO**
 
 #### **Fase 3: Características Avanzadas**
 - [ ] Sistema de torneos y playoffs
 - [ ] Exportar estadísticas a PDF/Excel
-- [ ] Integración con APIs de fútbol externas
-- [ ] Dashboard analytics avanzado
+- [ ] PWA (Progressive Web App) para móviles
+- [ ] Push notifications web
 - [ ] Modo offline con sincronización
-- [ ] Notificaciones push personalizadas
+- [ ] Compartir en redes sociales
 
 #### **Fase 4: Escalabilidad**
 - [ ] Microservicios architecture
@@ -494,21 +527,22 @@ npm run test:cov
 - [ ] Monitoring con Prometheus/Grafana
 - [ ] CI/CD pipeline completo
 
-## 🎯 **Enfoque Actual: Mobile-First**
+## 🎯 **Enfoque Actual: Mobile-First Web**
 
-### 📱 **¿Por qué React Native?**
-- **Grupos de WhatsApp**: El target principal usa móviles
-- **Acceso rápido**: Estadísticas al alcance del bolsillo
-- **Uso social**: Compartir resultados es más fácil en móvil
-- **Adopción**: Los usuarios están más cómodos con apps
+### 🌐 **¿Por qué Web Mobile-First?**
+- **Accesibilidad**: Funciona en cualquier dispositivo con navegador
+- **Grupos de WhatsApp**: Fácil compartir enlaces y resultados
+- **Sin instalación**: Los usuarios acceden directamente desde el navegador
+- **Responsive**: Se adapta perfectamente a móviles, tablets y desktop
+- **PWA**: Puede convertirse en app móvil sin app store
 
-### 🚀 **Características de la App Móvil**
-- Interfaz intuitiva y moderna
-- Navegación fluida con React Navigation
+### 🚀 **Características del Frontend Web**
+- Diseño mobile-first con TailwindCSS
+- Navegación intuitiva y touch-friendly
 - Integración completa con backend JWT
-- Optimizada para WhatsApp sharing
-- Modo offline básico
-- Push notifications para partidos
+- Optimizada para compartir en WhatsApp
+- PWA para experiencia como app nativa
+- Offline básico con service workers
 
 ## 🏆 **Métricas del Proyecto**
 

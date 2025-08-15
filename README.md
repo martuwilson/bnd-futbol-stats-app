@@ -1,6 +1,6 @@
 # ⚽ Fútbol Stats App
 
-> **🚀 Backend Production-Ready** | **📱 Mobile-First De### 🔄 **PRÓXIMO PASO**
+> **🚀 Backend Production-Ready** | 📱 Mobile-First Desing 🔄 **PRÓXIMO PASO**
 #### 🌐### 🌐 **Frontend Web (/client) - EN DESARROLLO** 🔄
 - **Framework**: React + TypeScript + Vite ⚡
 - **Estado**: Apollo Client (GraphQL)

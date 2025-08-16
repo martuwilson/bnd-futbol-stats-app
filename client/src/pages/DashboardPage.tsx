@@ -1,13 +1,5 @@
-import { useQuery } from '@apollo/client';
-import { GET_ME_QUERY } from '../graphql/queries';
-import LoadingSpinner from '../components/LoadingSpinner';
-
 const DashboardPage = () => {
-  const { data: userData, loading: userLoading } = useQuery(GET_ME_QUERY);
-
-  if (userLoading) {
-    return <LoadingSpinner />;
-  }
+  // TODO: Implementar GET_ME_QUERY en el backend para obtener datos del usuario
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -25,7 +17,7 @@ const DashboardPage = () => {
             </div>
             <div className="flex items-center space-x-2">
               <span className="text-xs sm:text-sm text-gray-600 hidden xs:block">
-                Hola, {userData?.me?.name || 'Usuario'}
+                Hola, Usuario
               </span>
               <button
                 onClick={() => {

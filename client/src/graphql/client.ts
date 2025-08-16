@@ -4,7 +4,7 @@ import { onError } from '@apollo/client/link/error';
 
 // 🌐 HTTP Link para conectar al backend GraphQL
 const httpLink = createHttpLink({
-  uri: 'http://localhost:3002/graphql',
+  uri: '/graphql', // Usa el proxy de Vite en desarrollo
 });
 
 // 🔐 Auth Link para JWT

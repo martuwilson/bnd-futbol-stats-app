@@ -1,30 +1,15 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { useQuery } from '@apollo/client'
-import { GET_ME_QUERY } from './graphql/queries'
 import { isAuthenticated } from './graphql/client'
 
-// 📱 Pages (las crearemos a continuación)
+// 📱 Pages
 import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
 import MatchesPage from './pages/MatchesPage'
 import StatsPage from './pages/StatsPage'
-import LoadingSpinner from './components/LoadingSpinner'
 
 // 🔐 Protected Route Component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { loading, error } = useQuery(GET_ME_QUERY, {
-    skip: !isAuthenticated(),
-  });
-
   if (!isAuthenticated()) {
-    return <Navigate to="/login" replace />;
-  }
-
-  if (loading) {
-    return <LoadingSpinner />;
-  }
-
-  if (error) {
     return <Navigate to="/login" replace />;
   }
 

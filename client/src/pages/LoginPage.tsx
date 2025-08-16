@@ -15,8 +15,8 @@ const LoginPage = () => {
 
   const [login, { loading }] = useMutation<{ login: AuthResponse }>(LOGIN_MUTATION, {
     onCompleted: (data) => {
-      setAuthToken(data.login.access_token);
-      localStorage.setItem('refresh_token', data.login.refresh_token);
+      setAuthToken(data.login.accessToken);
+      localStorage.setItem('refresh_token', data.login.refreshToken);
       localStorage.setItem('user', JSON.stringify(data.login.user));
       navigate('/');
     },
@@ -43,7 +43,7 @@ const LoginPage = () => {
     try {
       await login({
         variables: {
-          data: formData,
+          input: formData,
         },
       });
     } catch (error) {
@@ -141,7 +141,7 @@ const LoginPage = () => {
           {/* 📋 Demo Credentials */}
           <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-gray-100 rounded-lg">
             <p className="text-xs text-gray-600 text-center">
-              <strong>Demo:</strong> admin@demo.com / password123
+              <strong>Demo:</strong> williner.martin@gmail.com / Wert1234!
             </p>
           </div>
         </form>

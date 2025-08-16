@@ -2,10 +2,10 @@ import { gql } from '@apollo/client';
 
 // 🔐 Authentication Mutations
 export const LOGIN_MUTATION = gql`
-  mutation Login($data: LoginInput!) {
-    login(data: $data) {
-      access_token
-      refresh_token
+  mutation Login($input: LoginInput!) {
+    login(input: $input) {
+      accessToken
+      refreshToken
       user {
         id
         name
@@ -17,10 +17,10 @@ export const LOGIN_MUTATION = gql`
 `;
 
 export const REGISTER_MUTATION = gql`
-  mutation Register($data: CreateUserInput!) {
-    register(data: $data) {
-      access_token
-      refresh_token
+  mutation Register($input: RegisterInput!) {
+    register(input: $input) {
+      accessToken
+      refreshToken
       user {
         id
         name
@@ -32,10 +32,9 @@ export const REGISTER_MUTATION = gql`
 `;
 
 export const REFRESH_TOKEN_MUTATION = gql`
-  mutation RefreshToken($refreshToken: String!) {
-    refreshToken(refreshToken: $refreshToken) {
-      access_token
-      refresh_token
+  mutation RefreshToken($input: RefreshTokenInput!) {
+    refreshToken(input: $input) {
+      accessToken
     }
   }
 `;

@@ -31,6 +31,10 @@ model User {
   position  String?  // "Defensor", "Mediocampista", "Delantero", "Arquero"
   isActive  Boolean  @default(true)
   
+  // Torneo/Sala actual
+  tournamentId String?
+  tournament   Tournament? @relation("TournamentMembers", fields: [tournamentId], references: [id])
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -44,8 +48,37 @@ model User {
   
   // Estadísticas como jugador
   playerStats PlayerStats[]
+  
+  // Torneos creados (como ADMIN)
+  createdTournaments Tournament[] @relation("TournamentCreator")
 
   @@map("users")
+}
+
+// Torneos/Salas - El concepto principal de agrupación
+model Tournament {
+  id          String   @id @default(cuid())
+  name        String   // "Liga Barrio Norte 2025"
+  description String?  // Descripción opcional
+  shareCode   String   @unique @default(cuid()) // Código para compartir (más corto que el ID)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relaciones
+  createdById String
+  createdBy   User   @relation("TournamentCreator", fields: [createdById], references: [id])
+  
+  // Miembros del torneo
+  members     User[] @relation("TournamentMembers")
+  
+  // Partidos del torneo
+  matches     Match[]
+  
+  // Convocatorias del torneo
+  callUps     CallUp[]
+
+  @@map("tournaments")
 }
 
 // Partidos
@@ -64,6 +97,9 @@ model Match {
   // Relaciones
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  tournamentId String?
+  tournament   Tournament? @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
 
   // Jugadores participantes
   matchPlayers MatchPlayer[]
@@ -124,6 +160,9 @@ model CallUp {
   // Relaciones
   createdById String
   createdBy   User   @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  
+  tournamentId String?
+  tournament   Tournament? @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
   
   responses   CallUpResponse[]
 

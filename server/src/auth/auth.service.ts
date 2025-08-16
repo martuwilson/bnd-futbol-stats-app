@@ -122,4 +122,9 @@ export class AuthService {
       expiresIn: '15m',
     });
   }
+
+  async getCurrentUser(userId: string) {
+    const user = await this.usersService.findOne(userId);
+    return user as any; // Casting temporal para resolver conflicto de tipos Prisma/GraphQL
+  }
 }

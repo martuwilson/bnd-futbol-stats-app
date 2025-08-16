@@ -211,6 +211,7 @@ type Query {
   matchAnalysis(input: MatchAnalysisInput!): MatchStatistics!
   matches: [Match!]!
   matchesByUser(userId: String!): [Match!]!
+  me(userId: String!): User!
   mostActivePlayersPlayers(limit: Float = 10): [PlayerStatistics!]!
   playerStatistics(filter: StatisticsFilterInput, userId: String!): PlayerStatistics!
   positionStatistics(filter: StatisticsFilterInput): [PositionStatistics!]!

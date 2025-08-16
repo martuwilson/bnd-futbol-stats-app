@@ -1,4 +1,4 @@
-import { ApolloClient, InMemoryCache, createHttpLink, from } from '@apollo/client';
+import { ApolloClient, InMemoryCache, createHttpLink, from, gql } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 
@@ -72,6 +72,19 @@ export const apolloClient = new ApolloClient({
   },
 });
 
+// 📝 GraphQL Queries
+const GET_ME = gql`
+  query GetMe {
+    me {
+      id
+      email
+      name
+      role
+      createdAt
+    }
+  }
+`;
+
 // 🔧 Helper Functions
 export const getAuthToken = (): string | null => {
   return localStorage.getItem('access_token');
@@ -88,4 +101,34 @@ export const removeAuthToken = (): void => {
 
 export const isAuthenticated = (): boolean => {
   return Boolean(getAuthToken());
+};
+
+export const getCurrentUserId = (): string | null => {
+  const token = getAuthToken();
+  if (!token) return null;
+  
+  try {
+    // Decodificar JWT para obtener el user ID
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.sub || null;
+  } catch {
+    return null;
+  }
+};
+
+export const getCurrentUser = async () => {
+  if (!isAuthenticated()) {
+    return null;
+  }
+
+  try {
+    const { data } = await apolloClient.query({
+      query: GET_ME,
+      fetchPolicy: 'cache-first',
+    });
+    return data.me;
+  } catch (error) {
+    console.error('Error fetching current user:', error);
+    return null;
+  }
 };

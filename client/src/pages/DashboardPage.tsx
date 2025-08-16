@@ -2,7 +2,7 @@ const DashboardPage = () => {
   // TODO: Implementar GET_ME_QUERY en el backend para obtener datos del usuario
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pb-20">
       {/* 📱 Mobile-First Header */}
       <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="px-3 py-3 sm:px-6 lg:px-8">
